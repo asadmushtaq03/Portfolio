@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Maison Élise — Fine Dining</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&family=Cormorant:ital,wght@1,400;1,500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:#F8F5F0;color:#1C1C1C;overflow-x:hidden;}
+
+.reveal{opacity:0;transform:translateY(28px);transition:opacity 0.65s ease,transform 0.65s ease;}
+.reveal.vis{opacity:1;transform:translateY(0);}
+.reveal-d1{transition-delay:0.1s;}.reveal-d2{transition-delay:0.2s;}.reveal-d3{transition-delay:0.3s;}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 5%;height:76px;transition:background 0.4s,box-shadow 0.4s;}
+.nav.scrolled{background:rgba(248,245,240,0.97);backdrop-filter:blur(12px);box-shadow:0 1px 0 rgba(0,0,0,0.08);}
+.nav-logo{font-family:'DM Serif Display',serif;font-size:1.55rem;color:#1C1C1C;cursor:pointer;letter-spacing:0.5px;text-decoration:none;}
+.nav.scrolled .nav-logo{color:#1C1C1C;}
+.nav-logo em{font-style:italic;color:#8B5E3C;}
+.nav-links{display:flex;gap:2.5rem;list-style:none;}
+.nav-links a{font-family:'DM Sans',sans-serif;font-size:0.78rem;letter-spacing:1.5px;text-transform:uppercase;color:#4A4A4A;text-decoration:none;transition:color 0.25s;}
+.nav-links a:hover{color:#8B5E3C;}
+.nav-res{background:#1C1C1C;color:#F8F5F0;border:none;padding:10px 22px;font-family:'DM Sans',sans-serif;font-size:0.75rem;letter-spacing:2px;text-transform:uppercase;cursor:pointer;text-decoration:none;transition:background 0.25s;}
+.nav-res:hover{background:#8B5E3C;}
+.ham{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px;}
+.ham span{width:24px;height:1.5px;background:#1C1C1C;display:block;transition:all 0.3s;}
+
+/* MOBILE MENU */
+.mob{display:none;position:fixed;inset:0;background:#F8F5F0;z-index:200;flex-direction:column;align-items:center;justify-content:center;gap:2.5rem;}
+.mob.open{display:flex;}
+.mob a{font-family:'DM Serif Display',serif;font-size:2.2rem;color:#1C1C1C;text-decoration:none;transition:color 0.25s;}
+.mob a:hover{color:#8B5E3C;}
+.mob-close{position:absolute;top:24px;right:5%;font-size:1.5rem;background:none;border:none;cursor:pointer;color:#1C1C1C;}
+
+/* HERO */
+.hero{height:100vh;min-height:600px;display:grid;grid-template-columns:1fr 1fr;position:relative;overflow:hidden;}
+.hero-left{background:#1C1C1C;display:flex;flex-direction:column;justify-content:center;padding:120px 7% 80px;}
+.hero-right{position:relative;overflow:hidden;background:linear-gradient(145deg,#2A1A0A 0%,#4A2D14 40%,#1A1208 100%);}
+.hero-right-emoji{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:8rem;opacity:0.3;}
+.hero-right-overlay{position:absolute;inset:0;background:linear-gradient(to right,#1C1C1C 0%,transparent 35%);}
+.hero-tag{display:inline-block;border:1px solid rgba(200,168,107,0.5);color:#C8A86B;font-size:0.65rem;letter-spacing:4px;text-transform:uppercase;padding:6px 14px;margin-bottom:2rem;}
+.hero-title{font-family:'DM Serif Display',serif;font-size:clamp(2.8rem,5.5vw,5rem);color:#F8F5F0;line-height:1.05;margin-bottom:0.6rem;}
+.hero-title em{display:block;color:#C8A86B;font-size:0.45em;font-style:italic;letter-spacing:3px;margin-top:0.4rem;font-family:'Cormorant',serif;}
+.hero-line{width:48px;height:1px;background:#C8A86B;margin:1.8rem 0;}
+.hero-sub{color:rgba(248,245,240,0.55);font-size:1rem;line-height:1.8;max-width:340px;font-weight:300;}
+.hero-btns{display:flex;gap:1rem;margin-top:2.5rem;flex-wrap:wrap;}
+.btn-gold{background:#C8A86B;color:#1C1C1C;border:none;padding:13px 32px;font-family:'DM Sans',sans-serif;font-size:0.75rem;letter-spacing:2px;text-transform:uppercase;font-weight:500;cursor:pointer;transition:all 0.25s;text-decoration:none;display:inline-block;}
+.btn-gold:hover{background:#E0C48A;transform:translateY(-1px);}
+.btn-ghost{background:none;border:1px solid rgba(248,245,240,0.3);color:rgba(248,245,240,0.75);padding:13px 32px;font-family:'DM Sans',sans-serif;font-size:0.75rem;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all 0.25s;text-decoration:none;display:inline-block;}
+.btn-ghost:hover{border-color:#C8A86B;color:#C8A86B;}
+.hero-badge{position:absolute;bottom:48px;right:48px;background:rgba(200,168,107,0.1);border:1px solid rgba(200,168,107,0.3);padding:20px 24px;text-align:center;}
+.hero-badge-num{font-family:'DM Serif Display',serif;font-size:2.2rem;color:#C8A86B;line-height:1;}
+.hero-badge-label{font-size:0.62rem;letter-spacing:3px;text-transform:uppercase;color:rgba(248,245,240,0.45);margin-top:4px;}
+.hero-scroll{display:flex;align-items:center;gap:12px;margin-top:auto;padding-top:3rem;}
+.hero-scroll-line{width:40px;height:1px;background:#C8A86B;animation:pulse 2s ease infinite;}
+.hero-scroll span{font-size:0.62rem;letter-spacing:3px;text-transform:uppercase;color:rgba(248,245,240,0.3);}
+@keyframes pulse{0%,100%{opacity:0.4;}50%{opacity:1;}}
+
+/* SECTIONS */
+.sec{padding:100px 5%;}
+.eyebrow{font-size:0.65rem;letter-spacing:5px;text-transform:uppercase;color:#8B5E3C;display:block;margin-bottom:1.2rem;}
+.h2{font-family:'DM Serif Display',serif;font-size:clamp(1.9rem,3.5vw,2.8rem);line-height:1.2;color:#1C1C1C;margin-bottom:1.5rem;}
+.gold-rule{width:48px;height:1px;background:#C8A86B;margin-bottom:2rem;}
+.center-block{text-align:center;}
+.center-block .gold-rule{margin-left:auto;margin-right:auto;}
+
+/* INTRO */
+.intro-inner{max-width:780px;margin:0 auto;text-align:center;}
+.intro-inner .gold-rule{margin:0 auto 2rem;}
+.lead{font-size:1.08rem;color:#5A5A5A;line-height:1.85;font-weight:300;}
+
+/* MENU */
+.menu-sec{background:#1C1C1C;padding:100px 5%;}
+.menu-sec .h2{color:#F8F5F0;}
+.menu-sec .eyebrow{color:#C8A86B;}
+.menu-sec .gold-rule{margin-left:auto;margin-right:auto;}
+.tabs{display:flex;justify-content:center;flex-wrap:wrap;border:1px solid rgba(200,168,107,0.2);margin:2.5rem 0 3rem;}
+.tab{background:none;border:none;color:rgba(248,245,240,0.4);font-family:'DM Sans',sans-serif;font-size:0.72rem;letter-spacing:2.5px;text-transform:uppercase;padding:12px 26px;cursor:pointer;transition:all 0.25s;border-right:1px solid rgba(200,168,107,0.12);}
+.tab:last-child{border-right:none;}
+.tab.active,.tab:hover{background:rgba(200,168,107,0.12);color:#C8A86B;}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+.menu-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;max-width:1100px;margin:0 auto;}
+.mc{background:#222;padding:2rem;transition:background 0.25s;}
+.mc:hover{background:#2A2A2A;}
+.mc-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.6rem;}
+.mc-name{font-family:'DM Serif Display',serif;font-size:1.1rem;color:#F8F5F0;flex:1;padding-right:1rem;line-height:1.2;}
+.mc-price{color:#C8A86B;font-size:1rem;font-weight:500;white-space:nowrap;}
+.mc-desc{font-size:0.88rem;color:rgba(248,245,240,0.42);line-height:1.7;}
+.mc-tag{display:inline-block;font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;padding:3px 8px;margin-top:0.8rem;border:1px solid rgba(200,168,107,0.3);color:rgba(200,168,107,0.7);}
+.mc-tag.veg{border-color:rgba(100,180,100,0.35);color:rgba(120,200,120,0.85);}
+
+/* STORY */
+.story-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;max-width:1200px;margin:0 auto;}
+.story-visual{position:relative;}
+.story-box{aspect-ratio:3/4;background:linear-gradient(145deg,#2A1A0A,#3D2210);display:flex;align-items:center;justify-content:center;font-size:6rem;}
+.story-frame{position:absolute;top:-16px;right:-16px;bottom:16px;left:16px;border:1px solid rgba(200,168,107,0.3);pointer-events:none;}
+.story-stat{position:absolute;bottom:-20px;left:-20px;background:#8B5E3C;padding:22px 26px;}
+.stat-n{font-family:'DM Serif Display',serif;font-size:2.2rem;color:#F8F5F0;line-height:1;}
+.stat-l{font-size:0.62rem;letter-spacing:3px;text-transform:uppercase;color:rgba(248,245,240,0.6);margin-top:4px;}
+.story-text p{font-size:1rem;color:#5A5A5A;line-height:1.85;font-weight:300;margin-bottom:1.2rem;}
+.story-quote{font-family:'Cormorant',serif;font-style:italic;font-size:1.3rem;color:#8B5E3C;border-left:2px solid #C8A86B;padding-left:1.2rem;margin:1.8rem 0;line-height:1.65;}
+
+/* EXPERIENCE */
+.exp-sec{background:#222;padding:100px 5%;}
+.exp-sec .h2{color:#F8F5F0;}
+.exp-sec .eyebrow{color:#C8A86B;}
+.exp-sec .gold-rule{margin-left:auto;margin-right:auto;}
+.exp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;max-width:1100px;margin:3.5rem auto 0;}
+.ec{background:#1C1C1C;padding:2.5rem 2rem;transition:background 0.3s;position:relative;overflow:hidden;}
+.ec::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:#C8A86B;transform:scaleX(0);transition:transform 0.4s;}
+.ec:hover::before{transform:scaleX(1);}
+.ec:hover{background:#242424;}
+.ec-icon{font-size:2rem;margin-bottom:1.5rem;}
+.ec-title{font-family:'DM Serif Display',serif;font-size:1.2rem;color:#F8F5F0;margin-bottom:0.7rem;}
+.ec-desc{font-size:0.88rem;color:rgba(248,245,240,0.42);line-height:1.75;}
+
+/* TESTIMONIALS */
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5px;max-width:1200px;margin:3.5rem auto 0;}
+.tc{background:#fff;padding:2.5rem;border:1px solid rgba(0,0,0,0.06);}
+.tc-stars{color:#C8A86B;font-size:0.75rem;letter-spacing:3px;margin-bottom:1rem;}
+.tc-text{font-family:'Cormorant',serif;font-style:italic;font-size:1.05rem;color:#4A4A4A;line-height:1.8;margin-bottom:1.5rem;}
+.tc-author{display:flex;align-items:center;gap:0.75rem;}
+.tc-avatar{width:42px;height:42px;border-radius:50%;background:#1C1C1C;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;color:#C8A86B;font-size:1.1rem;flex-shrink:0;}
+.tc-name{font-size:0.88rem;font-weight:500;color:#1C1C1C;}
+.tc-city{font-size:0.75rem;color:#9A9A9A;margin-top:2px;}
+
+/* RESERVATION */
+.res-sec{background:#1C1C1C;padding:100px 5%;}
+.res-sec .h2{color:#F8F5F0;text-align:center;}
+.res-sec .eyebrow{color:#C8A86B;text-align:center;display:block;}
+.res-sec .gold-rule{margin:1.5rem auto 2rem;}
+.res-inner{max-width:660px;margin:0 auto;}
+.res-sub{color:rgba(248,245,240,0.5);text-align:center;margin-bottom:3rem;font-size:0.95rem;line-height:1.7;}
+.res-form{display:flex;flex-direction:column;gap:1rem;}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.fg{display:flex;flex-direction:column;gap:0.4rem;}
+.fg label{font-size:0.62rem;letter-spacing:3px;text-transform:uppercase;color:rgba(200,168,107,0.65);}
+.fg input,.fg select,.fg textarea{background:rgba(255,255,255,0.05);border:1px solid rgba(248,245,240,0.1);color:#F8F5F0;padding:12px 16px;font-family:'DM Sans',sans-serif;font-size:0.93rem;outline:none;transition:border-color 0.25s;width:100%;appearance:none;-webkit-appearance:none;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:#C8A86B;}
+.fg select option{background:#1C1C1C;color:#F8F5F0;}
+.fg textarea{height:90px;resize:none;}
+.form-btn{background:#C8A86B;color:#1C1C1C;border:none;padding:15px;font-family:'DM Sans',sans-serif;font-size:0.78rem;letter-spacing:2.5px;text-transform:uppercase;font-weight:500;cursor:pointer;transition:all 0.25s;margin-top:0.5rem;width:100%;}
+.form-btn:hover{background:#E0C48A;}
+.form-note{font-size:0.75rem;color:rgba(248,245,240,0.25);text-align:center;margin-top:0.5rem;}
+.success-box{background:rgba(200,168,107,0.08);border:1px solid rgba(200,168,107,0.3);padding:2.5rem;text-align:center;display:none;}
+.success-box h3{font-family:'DM Serif Display',serif;font-size:1.5rem;color:#C8A86B;margin-bottom:0.75rem;}
+.success-box p{font-size:0.9rem;color:rgba(248,245,240,0.5);line-height:1.7;}
+
+/* FOOTER */
+footer{background:#141414;border-top:1px solid rgba(200,168,107,0.1);padding:60px 5% 30px;}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;max-width:1200px;margin:0 auto 3rem;}
+.footer-logo{font-family:'DM Serif Display',serif;font-size:1.6rem;color:#F8F5F0;}
+.footer-logo em{color:#C8A86B;font-style:italic;}
+.footer-tagline{font-size:0.85rem;color:rgba(248,245,240,0.3);line-height:1.7;margin-top:0.75rem;max-width:220px;}
+.footer-social{display:flex;gap:0.5rem;margin-top:1.5rem;}
+.soc{width:34px;height:34px;border:1px solid rgba(248,245,240,0.1);display:flex;align-items:center;justify-content:center;font-size:0.7rem;color:rgba(248,245,240,0.3);cursor:pointer;transition:all 0.25s;background:none;text-decoration:none;}
+.soc:hover{border-color:#C8A86B;color:#C8A86B;}
+.fcol h4{font-size:0.62rem;letter-spacing:4px;text-transform:uppercase;color:#C8A86B;margin-bottom:1.5rem;}
+.fcol ul{list-style:none;}
+.fcol ul li{margin-bottom:0.7rem;}
+.fcol ul li a{font-size:0.88rem;color:rgba(248,245,240,0.35);text-decoration:none;transition:color 0.25s;}
+.fcol ul li a:hover{color:#C8A86B;}
+.fcol p{font-size:0.88rem;color:rgba(248,245,240,0.35);line-height:2;}
+.footer-bottom{max-width:1200px;margin:0 auto;padding-top:2rem;border-top:1px solid rgba(248,245,240,0.05);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+.footer-bottom p{font-size:0.75rem;color:rgba(248,245,240,0.2);}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr;}
+  .hero-right{display:none;}
+  .hero-left{padding:110px 5% 80px;}
+  .story-grid{grid-template-columns:1fr;gap:60px;}
+  .story-box{aspect-ratio:16/9;}
+  .exp-grid{grid-template-columns:1fr 1fr;}
+  .testi-grid{grid-template-columns:1fr;}
+  .menu-grid{grid-template-columns:1fr;}
+  .footer-grid{grid-template-columns:1fr 1fr;}
+  .nav-links,.nav-res{display:none;}
+  .ham{display:flex;}
+}
+@media(max-width:600px){
+  .sec,.menu-sec,.exp-sec,.res-sec{padding:70px 4%;}
+  .frow{grid-template-columns:1fr;}
+  .exp-grid{grid-template-columns:1fr;}
+  .footer-grid{grid-template-columns:1fr;}
+  .footer-bottom{flex-direction:column;text-align:center;}
+  .hero-badge{display:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- MOBILE MENU -->
+<div class="mob" id="mob">
+  <button class="mob-close" onclick="closeMob()">✕</button>
+  <a href="#intro" onclick="closeMob()">About</a>
+  <a href="#menu-sec" onclick="closeMob()">Menu</a>
+  <a href="#story" onclick="closeMob()">Story</a>
+  <a href="#exp-sec" onclick="closeMob()">Experience</a>
+  <a href="#testi" onclick="closeMob()">Reviews</a>
+  <a href="#res-sec" onclick="closeMob()">Reserve</a>
+</div>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <a href="#hero" class="nav-logo">Maison <em>Élise</em></a>
+  <ul class="nav-links">
+    <li><a href="#intro">About</a></li>
+    <li><a href="#menu-sec">Menu</a></li>
+    <li><a href="#story">Story</a></li>
+    <li><a href="#exp-sec">Experience</a></li>
+    <li><a href="#testi">Reviews</a></li>
+  </ul>
+  <a href="#res-sec" class="nav-res">Reserve</a>
+  <button class="ham" onclick="openMob()"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- HERO -->
+<div class="hero" id="hero">
+  <div class="hero-left">
+    <div class="hero-tag reveal">Paris · Est. 1998</div>
+    <h1 class="hero-title reveal reveal-d1">
+      Where Every<br>Plate Tells<br>a Story
+      <em>Modern French Cuisine</em>
+    </h1>
+    <div class="hero-line reveal reveal-d2"></div>
+    <p class="hero-sub reveal reveal-d2">Chef Élise Laurent crafts tasting menus that honour classical technique while breathing in the spirit of today. Reservations essential.</p>
+    <div class="hero-btns reveal reveal-d3">
+      <a href="#res-sec" class="btn-gold">Reserve a Table</a>
+      <a href="#menu-sec" class="btn-ghost">View Menu</a>
+    </div>
+    <div class="hero-scroll reveal">
+      <div class="hero-scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-right-emoji">🍽️</div>
+    <div class="hero-right-overlay"></div>
+    <div class="hero-badge">
+      <div class="hero-badge-num">26</div>
+      <div class="hero-badge-label">Years of Excellence</div>
+    </div>
+  </div>
+</div>
+
+<!-- INTRO -->
+<section class="sec" id="intro" style="background:#F8F5F0;">
+  <div class="intro-inner">
+    <span class="eyebrow reveal">Our Philosophy</span>
+    <h2 class="h2 reveal reveal-d1">Cuisine as an act of care.</h2>
+    <div class="gold-rule reveal reveal-d1" style="margin-left:auto;margin-right:auto;"></div>
+    <p class="lead reveal reveal-d2">At Maison Élise, we believe that fine dining is not about ceremony — it is about connection. Every element on the plate, from the hand-foraged herbs to the wines selected by our sommelier, is chosen to create a single cohesive experience that lingers long after the evening ends.</p>
+  </div>
+</section>
+
+<!-- MENU -->
+<section class="menu-sec" id="menu-sec">
+  <div class="center-block">
+    <span class="eyebrow reveal">Culinary Selection</span>
+    <h2 class="h2 reveal reveal-d1">The Menu</h2>
+    <div class="gold-rule reveal reveal-d1" style="margin-left:auto;margin-right:auto;margin-bottom:0;"></div>
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('starters',this)">Starters</button>
+    <button class="tab" onclick="switchTab('mains',this)">Mains</button>
+    <button class="tab" onclick="switchTab('desserts',this)">Desserts</button>
+    <button class="tab" onclick="switchTab('drinks',this)">Drinks</button>
+  </div>
+
+  <div class="tab-panel active" id="tab-starters">
+    <div class="menu-grid">
+      <div class="mc reveal"><div class="mc-top"><div class="mc-name">Burrata &amp; Heirloom Tomato</div><div class="mc-price">$18</div></div><p class="mc-desc">Hand-pulled burrata, vine tomatoes, aged balsamic, basil oil, sea salt flakes.</p><span class="mc-tag">Seasonal</span></div>
+      <div class="mc reveal reveal-d1"><div class="mc-top"><div class="mc-name">Tuna Tartare</div><div class="mc-price">$22</div></div><p class="mc-desc">Yellowfin tuna, avocado cream, ponzu, micro shiso, sesame crisp.</p><span class="mc-tag">Chef's Pick</span></div>
+      <div class="mc reveal reveal-d2"><div class="mc-top"><div class="mc-name">Truffle Arancini</div><div class="mc-price">$16</div></div><p class="mc-desc">Risotto croquettes filled with black truffle and fontina, saffron aioli.</p></div>
+      <div class="mc reveal reveal-d3"><div class="mc-top"><div class="mc-name">Foie Gras Torchon</div><div class="mc-price">$28</div></div><p class="mc-desc">Duck foie gras, brioche toast, fig compote, Sauternes jelly.</p><span class="mc-tag">Signature</span></div>
+    </div>
+  </div>
+  <div class="tab-panel" id="tab-mains">
+    <div class="menu-grid">
+      <div class="mc reveal"><div class="mc-top"><div class="mc-name">Wagyu Beef Tenderloin</div><div class="mc-price">$68</div></div><p class="mc-desc">A5 Wagyu, pommes purée, red wine jus, seasonal truffle shavings.</p><span class="mc-tag">Signature</span></div>
+      <div class="mc reveal reveal-d1"><div class="mc-top"><div class="mc-name">Pan-Seared Halibut</div><div class="mc-price">$44</div></div><p class="mc-desc">Wild halibut, cauliflower velouté, capers, lemon beurre blanc.</p><span class="mc-tag">Chef's Pick</span></div>
+      <div class="mc reveal reveal-d2"><div class="mc-top"><div class="mc-name">Duck Confit</div><div class="mc-price">$38</div></div><p class="mc-desc">48-hour slow duck leg, lentil cassoulet, cherry gastrique, crispy skin.</p></div>
+      <div class="mc reveal reveal-d3"><div class="mc-top"><div class="mc-name">Wild Mushroom Risotto</div><div class="mc-price">$32</div></div><p class="mc-desc">Porcini, chanterelle, arborio, aged Parmigiano-Reggiano, truffle oil.</p><span class="mc-tag veg">Vegetarian</span></div>
+    </div>
+  </div>
+  <div class="tab-panel" id="tab-desserts">
+    <div class="menu-grid">
+      <div class="mc reveal"><div class="mc-top"><div class="mc-name">Valrhona Soufflé</div><div class="mc-price">$16</div></div><p class="mc-desc">Dark chocolate soufflé, Chantilly cream, vanilla bean ice cream. Allow 18 mins.</p><span class="mc-tag">Must Try</span></div>
+      <div class="mc reveal reveal-d1"><div class="mc-top"><div class="mc-name">Crème Brûlée</div><div class="mc-price">$13</div></div><p class="mc-desc">Classic Tahitian vanilla custard, caramelized sugar crust, seasonal berries.</p></div>
+      <div class="mc reveal reveal-d2"><div class="mc-top"><div class="mc-name">Tarte Tatin</div><div class="mc-price">$14</div></div><p class="mc-desc">Caramelized apple tart, flaky pastry, calvados crème fraîche.</p><span class="mc-tag">Seasonal</span></div>
+    </div>
+  </div>
+  <div class="tab-panel" id="tab-drinks">
+    <div class="menu-grid">
+      <div class="mc reveal"><div class="mc-top"><div class="mc-name">Château Margaux 2018</div><div class="mc-price">$320</div></div><p class="mc-desc">Bordeaux, France. Cassis, cedar, silky tannins. Exceptional vintage.</p><span class="mc-tag">Sommelier's Choice</span></div>
+      <div class="mc reveal reveal-d1"><div class="mc-top"><div class="mc-name">Cloudy Bay Sauvignon Blanc</div><div class="mc-price">$85</div></div><p class="mc-desc">Marlborough, NZ. Zesty citrus, passion fruit, crisp mineral finish.</p></div>
+      <div class="mc reveal reveal-d2"><div class="mc-top"><div class="mc-name">Negroni Classico</div><div class="mc-price">$18</div></div><p class="mc-desc">Campari, sweet vermouth, gin, flamed orange peel.</p></div>
+      <div class="mc reveal reveal-d3"><div class="mc-top"><div class="mc-name">Elderflower Spritz</div><div class="mc-price">$12</div></div><p class="mc-desc">St. Germain, sparkling water, cucumber, fresh mint. Non-alcoholic option available.</p><span class="mc-tag">N/A Available</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- STORY -->
+<section class="sec" id="story" style="background:#F8F5F0;">
+  <div class="story-grid">
+    <div class="story-visual reveal">
+      <div class="story-box">🌿</div>
+      <div class="story-frame"></div>
+      <div class="story-stat">
+        <div class="stat-n">3★</div>
+        <div class="stat-l">Michelin Stars</div>
+      </div>
+    </div>
+    <div class="reveal reveal-d1">
+      <span class="eyebrow">Our Story</span>
+      <h2 class="h2">Born in a market kitchen.<br>Perfected over decades.</h2>
+      <div class="gold-rule"></div>
+      <blockquote class="story-quote">"I cook the way my grandmother taught me — with patience, with love, and with complete disregard for shortcuts."</blockquote>
+      <div class="story-text">
+        <p>Chef Élise Laurent opened Maison Élise in 1998 in the 7th arrondissement of Paris with eleven seats and a single tasting menu. What began as a quiet labour of love became one of the most talked-about openings in the French capital that decade.</p>
+        <p>Today, with three Michelin stars and a team of forty, the ethos has not shifted: every dish is made from scratch, every ingredient is sourced personally, and every guest receives the same unwavering attention.</p>
+      </div>
+      <a href="#exp-sec" class="btn-gold" style="margin-top:1.5rem;">Our Experience</a>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section class="exp-sec" id="exp-sec">
+  <div class="center-block">
+    <span class="eyebrow reveal">Why Maison Élise</span>
+    <h2 class="h2 reveal reveal-d1">An Evening Unlike Any Other</h2>
+    <div class="gold-rule reveal reveal-d1" style="margin-left:auto;margin-right:auto;margin-bottom:0;"></div>
+  </div>
+  <div class="exp-grid">
+    <div class="ec reveal"><div class="ec-icon">🕯️</div><h3 class="ec-title">Private Dining</h3><p class="ec-desc">Two candlelit private rooms for gatherings of 4 to 14 guests, each dressed with fresh florals and bespoke tableware.</p></div>
+    <div class="ec reveal reveal-d1"><div class="ec-icon">👨‍🍳</div><h3 class="ec-title">Chef's Table</h3><p class="ec-desc">Six seats at the pass for an unscripted 10-course menu narrated by Chef Élise herself. Friday evenings only.</p></div>
+    <div class="ec reveal reveal-d2"><div class="ec-icon">🍷</div><h3 class="ec-title">Wine Cellar Tours</h3><p class="ec-desc">Our cellar holds 12,000 bottles from 24 regions. Private tours and tastings available by prior arrangement.</p></div>
+    <div class="ec reveal"><div class="ec-icon">🌱</div><h3 class="ec-title">Garden to Plate</h3><p class="ec-desc">We maintain a kitchen garden in Normandy. Produce harvested on Wednesday arrives on Thursday's menu.</p></div>
+    <div class="ec reveal reveal-d1"><div class="ec-icon">🎻</div><h3 class="ec-title">Live Chamber Music</h3><p class="ec-desc">A string duo performs every Saturday from 8 PM. Reservations for music evenings fill eight weeks in advance.</p></div>
+    <div class="ec reveal reveal-d2"><div class="ec-icon">🎁</div><h3 class="ec-title">Gift Experiences</h3><p class="ec-desc">Culinary experiences, cellar tours, and tasting menus available as beautifully packaged gift vouchers.</p></div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="sec" id="testi" style="background:#F8F5F0;">
+  <div class="center-block">
+    <span class="eyebrow reveal">Guest Voices</span>
+    <h2 class="h2 reveal reveal-d1">What Our Guests Say</h2>
+    <div class="gold-rule reveal reveal-d1" style="margin-left:auto;margin-right:auto;margin-bottom:0;"></div>
+  </div>
+  <div class="testi-grid">
+    <div class="tc reveal">
+      <div class="tc-stars">★★★★★</div>
+      <p class="tc-text">"The truffle arancini alone is worth the reservation. Every course was a study in restraint and elegance — Maison has genuinely earned its place among Europe's finest."</p>
+      <div class="tc-author"><div class="tc-avatar">C</div><div><div class="tc-name">Charlotte W.</div><div class="tc-city">London</div></div></div>
+    </div>
+    <div class="tc reveal reveal-d1">
+      <div class="tc-stars">★★★★★</div>
+      <p class="tc-text">"Exceptional tasting menu. The sommelier's pairing choices were inspired, and the service was warm without being intrusive. A flawless evening."</p>
+      <div class="tc-author"><div class="tc-avatar">J</div><div><div class="tc-name">James Harrington</div><div class="tc-city">New York</div></div></div>
+    </div>
+    <div class="tc reveal reveal-d2">
+      <div class="tc-stars">★★★★★</div>
+      <p class="tc-text">"I've been to Michelin-starred restaurants across the continent. Maison stands with the best — the Wagyu was transcendent, the atmosphere intimate and impeccable."</p>
+      <div class="tc-author"><div class="tc-avatar">S</div><div><div class="tc-name">Sofia Müller</div><div class="tc-city">Zürich</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- RESERVATION -->
+<section class="res-sec" id="res-sec">
+  <div class="res-inner">
+    <span class="eyebrow reveal">Book Your Evening</span>
+    <h2 class="h2 reveal reveal-d1">Reserve a Table</h2>
+    <div class="gold-rule reveal" style="margin-left:auto;margin-right:auto;"></div>
+    <p class="res-sub reveal">For parties of 8 or more, please call <strong style="color:#C8A86B;">+33 1 45 62 98 10</strong>. Same-day reservations by phone only.</p>
+    <div class="res-form reveal" id="resForm">
+      <div class="frow">
+        <div class="fg"><label>Full Name *</label><input type="text" id="fname" placeholder="Your name"/></div>
+        <div class="fg"><label>Email Address *</label><input type="email" id="femail" placeholder="your@email.com"/></div>
+      </div>
+      <div class="frow">
+        <div class="fg"><label>Date *</label><input type="date" id="fdate"/></div>
+        <div class="fg">
+          <label>Preferred Time *</label>
+          <select id="ftime">
+            <option value="">Select time</option>
+            <option>12:00 PM — Lunch</option>
+            <option>1:00 PM — Lunch</option>
+            <option>7:00 PM — Dinner</option>
+            <option>8:00 PM — Dinner</option>
+            <option>9:00 PM — Dinner</option>
+            <option>9:30 PM — Late Dinner</option>
+          </select>
+        </div>
+      </div>
+      <div class="frow">
+        <div class="fg">
+          <label>Guests</label>
+          <select id="fguests">
+            <option>1 Guest</option><option selected>2 Guests</option><option>3 Guests</option>
+            <option>4 Guests</option><option>5 Guests</option><option>6 Guests</option><option>7 Guests</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Occasion (optional)</label>
+          <select id="focc">
+            <option value="">Select</option>
+            <option>Anniversary</option><option>Birthday</option>
+            <option>Business Dinner</option><option>Proposal</option><option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="fg"><label>Special Requests</label><textarea id="fnotes" placeholder="Dietary requirements, allergies, seating preferences…"></textarea></div>
+      <button class="form-btn" onclick="submitForm()">Confirm Reservation</button>
+      <p class="form-note">We will confirm your booking within 2 hours by email.</p>
+    </div>
+    <div class="success-box" id="successBox">
+      <h3 id="successName">Merci!</h3>
+      <p id="successMsg">Your reservation request has been received.<br>We will confirm by email within two hours.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo">Maison <em>Élise</em></div>
+      <p class="footer-tagline">Fine French cuisine in the heart of Paris. Three Michelin stars since 2007.</p>
+      <div class="footer-social">
+        <a href="#" class="soc">f</a><a href="#" class="soc">ig</a><a href="#" class="soc">tw</a><a href="#" class="soc">yt</a>
+      </div>
+    </div>
+    <div class="fcol">
+      <h4>Navigate</h4>
+      <ul>
+        <li><a href="#intro">About</a></li>
+        <li><a href="#menu-sec">Menu</a></li>
+        <li><a href="#story">Our Story</a></li>
+        <li><a href="#exp-sec">Experience</a></li>
+        <li><a href="#testi">Reviews</a></li>
+        <li><a href="#res-sec">Reserve</a></li>
+      </ul>
+    </div>
+    <div class="fcol">
+      <h4>Hours</h4>
+      <p>Tuesday – Friday<br>12 PM – 2 PM<br>7 PM – 11 PM</p>
+      <p style="margin-top:0.75rem;">Saturday – Sunday<br>12 PM – 3 PM<br>7 PM – 11:30 PM</p>
+      <p style="margin-top:0.75rem;">Monday: Closed</p>
+    </div>
+    <div class="fcol">
+      <h4>Find Us</h4>
+      <p>14 Rue de Grenelle<br>75007 Paris, France</p>
+      <p style="margin-top:0.75rem;">+33 1 45 62 98 10</p>
+      <p>hello@maisonelise.fr</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2024 Maison Élise. All rights reserved.</p>
+    <p>Privacy Policy · Legal Notice</p>
+  </div>
+</footer>
+
+<script>
+// NAV scroll effect
+window.addEventListener('scroll', function(){
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// Mobile menu
+function openMob(){ document.getElementById('mob').classList.add('open'); document.body.style.overflow='hidden'; }
+function closeMob(){ document.getElementById('mob').classList.remove('open'); document.body.style.overflow=''; }
+
+// Scroll reveal
+var observer = new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(e.isIntersecting){ e.target.classList.add('vis'); observer.unobserve(e.target); }
+  });
+}, {threshold: 0.1});
+document.querySelectorAll('.reveal').forEach(function(el){ observer.observe(el); });
+
+// Trigger hero reveals on load
+window.addEventListener('load', function(){
+  setTimeout(function(){
+    document.querySelectorAll('#hero .reveal').forEach(function(el){ el.classList.add('vis'); });
+  }, 150);
+});
+
+// Menu tabs
+function switchTab(id, btn){
+  document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+  document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('active'); });
+  btn.classList.add('active');
+  var panel = document.getElementById('tab-'+id);
+  panel.classList.add('active');
+  // re-trigger reveals in new panel
+  panel.querySelectorAll('.reveal').forEach(function(el){
+    el.classList.remove('vis');
+    observer.observe(el);
+  });
+}
+
+// Set min date
+var d = new Date().toISOString().split('T')[0];
+document.getElementById('fdate').setAttribute('min', d);
+document.getElementById('fdate').value = d;
+
+// Reservation form
+function submitForm(){
+  var name = document.getElementById('fname').value.trim();
+  var email = document.getElementById('femail').value.trim();
+  var date = document.getElementById('fdate').value;
+  var time = document.getElementById('ftime').value;
+  if(!name || !email || !date || !time){
+    alert('Please fill in all required fields.');
+    return;
+  }
+  document.getElementById('successName').textContent = 'Merci, ' + name + '.';
+  document.getElementById('successMsg').innerHTML = 'Your reservation request for <strong style="color:#C8A86B;">' + date + '</strong> at <strong style="color:#C8A86B;">' + time + '</strong> has been received.<br>We will confirm by email within two hours.';
+  document.getElementById('resForm').style.display = 'none';
+  document.getElementById('successBox').style.display = 'block';
+}
+</script>
+</body>
+</html>
